@@ -14,11 +14,11 @@ export const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       {
-        path: '/',
+        path: '/dffkrjfkr',
         element: <Home />,
       },
       {
-        path: '/soon',
+        path: '/',
         element: <ComingSoon />,
       },
 
