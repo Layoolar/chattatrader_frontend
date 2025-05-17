@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import chatboturl from '../../public/images/chatbot.png';
+import chatboturl from '../../../public/images/chatbot.png';
 import { Toaster, toast } from 'react-hot-toast';
-import LoadingSpinner from '../reuseables/LoadingSpinner';
+import LoadingSpinner from '../../reuseables/BtnLoader';
 
 const ComingSoon = () => {
   const [email, setEmail] = useState('');
