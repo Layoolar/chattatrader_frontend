@@ -1,9 +1,11 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-//import Home from './pages/Home';
-import About from './pages/About';
-import NotFound from './pages/NotFound';
 import ComingSoon from './pages/ComingSoon';
+import { lazy } from 'react';
+
+const Home = lazy(() => import('./pages/Home'));
+const About = lazy(() => import('./pages/About'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 export const router = createBrowserRouter([
   {
@@ -11,10 +13,10 @@ export const router = createBrowserRouter([
     element: <App />,
     errorElement: <NotFound />,
     children: [
-      // {
-      //   path: '/',
-      //   element: <Home />,
-      // },
+      {
+        path: '/dfrkfrfmkrfmkfrkf',
+        element: <Home />,
+      },
       {
         path: '/',
         element: <ComingSoon />,
