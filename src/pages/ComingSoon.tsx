@@ -58,12 +58,14 @@ const ComingSoon = () => {
             }`}
           >
             {isLoading ? (
-              <div className='flex items-center justify-center'>
-                <LoadingSpinner className='mr-2' />
-                Processing...
+              <div className='flex items-center justify-center gap-2'>
+                <LoadingSpinner className='w-4 h-4 sm:w-6 sm:h-6 md:w-8 md:h-8' />
+                <p className='text-sm sm:text-base md:text-lg leading-none'>
+                  Processing...
+                </p>
               </div>
             ) : (
-              'Notify Me'
+              <p className='text-sm sm:text-base md:text-lg'>Notify Me</p>
             )}
           </button>
         </form>

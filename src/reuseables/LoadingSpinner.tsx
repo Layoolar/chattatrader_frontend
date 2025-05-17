@@ -1,21 +1,17 @@
 import React from 'react';
 
 interface LoadingSpinnerProps {
-  size?: number;
   color?: string;
   className?: string;
 }
 
 const LoadingSpinner: React.FC<LoadingSpinnerProps> = ({
-  size = 5,
   color = 'text-white',
-  className = '',
+  className = 'h-5 w-5',
 }) => {
-  const sizeClasses = `h-${size} w-${size}`;
-
   return (
     <svg
-      className={`animate-spin ${sizeClasses} ${color} ${className}`}
+      className={`animate-spin ${color} ${className}`}
       xmlns='http://www.w3.org/2000/svg'
       fill='none'
       viewBox='0 0 24 24'
