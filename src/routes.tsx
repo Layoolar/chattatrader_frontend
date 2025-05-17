@@ -1,10 +1,10 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
-import ComingSoon from './pages/ComingSoon';
+import ComingSoon from './pages/ComingSoon/ComingSoon';
 import { lazy } from 'react';
 
-const Home = lazy(() => import('./pages/Home'));
-const About = lazy(() => import('./pages/About'));
+const Home = lazy(() => import('./pages/Home/Home'));
+const About = lazy(() => import('./pages/About/About'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 export const router = createBrowserRouter([
