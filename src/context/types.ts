@@ -29,5 +29,7 @@ export interface User {
   solPrivateKey: string;
   solMnemonic: string;
   isVerified: boolean;
+  chats?: any;
+  token?: string;
   // transactionHistory:{type:""}{}
 }

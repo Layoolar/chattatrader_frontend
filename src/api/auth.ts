@@ -13,11 +13,13 @@ type RegisterRequest = {
 };
 
 export const login = async (data: LoginRequest): Promise<Partial<User>> => {
-  return instance.post<User>('/auth/login', data).then((res) => res.data);
+  return instance
+    .post<Partial<User>>('/users/login', data)
+    .then((res) => res.data);
 };
 
 export const register = async (
   data: RegisterRequest
 ): Promise<Partial<User>> => {
-  return instance.post<User>('/auth/register', data).then((res) => res.data);
+  return instance.post<User>('/users/register', data).then((res) => res.data);
 };
