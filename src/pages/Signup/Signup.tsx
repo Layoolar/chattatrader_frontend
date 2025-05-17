@@ -3,7 +3,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { register } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
-import FormInput from '@/components/FormInput';
+import FormInput from '../../components/FormInput';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
