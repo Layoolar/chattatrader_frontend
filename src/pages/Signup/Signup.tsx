@@ -44,8 +44,22 @@ const Signup: React.FC = () => {
       });
       toast.success("Signup successful! Please login.");
       navigate("/login");
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || "Signup failed");
+    } catch (err: unknown) {
+      if (
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        err.response &&
+        typeof err.response === 'object' &&
+        'data' in err.response &&
+        err.response.data && 
+        typeof err.response.data === 'object' && 
+        'message' in err.response.data
+      ) {
+         toast.error((err.response.data as { message?: string}).message || 'Login failed');
+      } else {
+         toast.error('Signup failed');
+      }
     }
   };
 

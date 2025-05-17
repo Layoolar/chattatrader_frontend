@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { login } from '../../api/auth';
+import { login as loginApi } from '../../api/auth';
 import toast from 'react-hot-toast';
 import { useNavigate, Link } from 'react-router-dom';
 import FormInput from '../../components/FormInput';
@@ -25,17 +25,31 @@ const validationSchema = Yup.object({
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const { setUser } = useAuth();
+  const { login } = useAuth();
   const navigate = useNavigate();
 
   const handleSubmit = async (values: LoginFormValues) => {
     try {
-      const user = await login(values);
-      setUser(user);
+      const user = await loginApi(values);
+       login(user);
       toast.success('Login successful!');
       navigate('/');
-    } catch (err: any) {
-      toast.error(err?.response?.data?.message || 'Login failed');
+    } catch (err: unknown) {
+      if (
+        err &&
+        typeof err === 'object' &&
+        'response' in err &&
+        err.response &&
+        typeof err.response === 'object' &&
+        'data' in err.response &&
+        err.response.data && 
+        typeof err.response.data === 'object' && 
+        'message' in err.response.data
+      ) {
+         toast.error((err.response.data as { message?: string}).message || 'Login failed');
+      } else {
+         toast.error('Login failed');
+      }
     }
   };
 
