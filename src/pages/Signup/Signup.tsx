@@ -43,7 +43,8 @@ const Signup: React.FC = () => {
         password: values.password,
       });
       toast.success("Signup successful! Please login.");
-      navigate("/login");
+      //navigate("/verify-top");
+      navigate(`/verify-otp?email=${encodeURIComponent(values.email)}`);
     } catch (err: unknown) {
       if (
         err &&

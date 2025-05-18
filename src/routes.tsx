@@ -3,6 +3,7 @@ import App from './App';
 import ComingSoon from './pages/ComingSoon/ComingSoon';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
+import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
 import { lazy } from 'react';
 
 const Home = lazy(() => import('./pages/Home/Home'));
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: '/login',
         element: <Login />
+      },
+      {
+        path: '/verify-otp',
+        element: <VerifyOtp />
       }
     ],
   },
