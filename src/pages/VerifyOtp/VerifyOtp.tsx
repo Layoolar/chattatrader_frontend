@@ -7,8 +7,8 @@ import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../../
 import { Label } from '../../ui/label';
 import { Button } from '../../ui/button';
 // import your verifyOTP and handleError functions
-// import { verifyOTP } from '../../api/auth'; // <-- Uncomment and adjust path
-// import { handleError } from '../../utils/handleError'; // <-- Uncomment and adjust path
+// import { verifyOTP } from '../../api/auth'
+// import { handleError } from '../../utils/handleError'; 
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
