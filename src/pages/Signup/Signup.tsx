@@ -263,7 +263,8 @@ const NewLogin: React.FC = () => {
             <CardContent className="pt-6">
               <h2 className="text-4xl font-bold text-center text-gray-900 mb-2">Welcome Back</h2>
               <p className="text-sm text-center text-gray-600 mb-6">Please enter your details</p>
-              <Tabs defaultValue={selectedTab} onValueChange={(val) => setSelectedTab(val as 'login' | 'signup')}>
+              <Tabs 
+                defaultValue={selectedTab} onValueChange={(val) => setSelectedTab(val as 'login' | 'signup')}>
                 <TabsList className="grid w-full grid-cols-2 mb-6">
                   <TabsTrigger value="login">Login</TabsTrigger>
                   <TabsTrigger value="signup">Signup</TabsTrigger>

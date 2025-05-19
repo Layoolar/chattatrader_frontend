@@ -137,7 +137,7 @@ const VerifyOtp: React.FC = () => {
       <div className='w-1/2 hidden md:flex'>
         <img
           className='h-full w-full object-cover'
-          src='/images/frame.jpeg'
+          src='/images/chatbot.png'
           alt='ChattaTrader background'
         />
       </div>
