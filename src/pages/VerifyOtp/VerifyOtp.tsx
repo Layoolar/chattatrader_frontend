@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate } from 'react-router-dom';
 import { Formik, Form, ErrorMessage } from 'formik';
-import { Card, CardContent } from '../../ui/Card';
-import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../../ui/input-otp';
-import { Label } from '../../ui/label';
-import { Button } from '../../ui/button';
-// import your verifyOTP and handleError functions
-// import { verifyOTP } from '../../api/auth'
-// import { handleError } from '../../utils/handleError'; 
+import { Card, CardContent } from '../../reuseables/Card'
+import { InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot } from '../../reuseables/input-otp';
+import { Label } from '../../reuseables/label';
+import { Button } from '../../reuseables/button';
 
 const otpValidationSchema = Yup.object({
   otp: Yup.string()
@@ -31,7 +28,7 @@ const VerifyOtp: React.FC = () => {
     setError('');
     setIsResending(true);
     try {
-      // await resendOTP({ email }); // <-- Implement your resend OTP logic here
+      //  handle API
       // toast.success('OTP resent successfully!');
     } catch (err: unknown) {
       setError('Failed to resend OTP. Please try again.');
