@@ -2,7 +2,6 @@ import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 import ComingSoon from './pages/ComingSoon/ComingSoon';
 import Signup from './pages/Signup/Signup';
-import Login from './pages/Login/Login';
 import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
 import { lazy } from 'react';
 
@@ -32,10 +31,6 @@ export const router = createBrowserRouter([
       {
         path: '/signup',
         element: <Signup />
-      },
-      {
-        path: '/login',
-        element: <Login />
       },
       {
         path: '/verify-otp',

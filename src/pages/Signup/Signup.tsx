@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
-import { Formik, Form } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
-import { register } from '../../api/auth';
+import { register, login as loginApi } from '../../api/auth';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/solid';
-import FormInput from '../../components/FormInput';
-import { Link, useNavigate } from 'react-router-dom';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../reuseables/tabs';
+import { Card, CardContent } from '../../reuseables/Card';
+import { Label } from '../../reuseables/label';
+import { useAuth } from '../../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+import Input from '../../reuseables/input';
+import { Button } from '../../reuseables/button';
 import toast from 'react-hot-toast';
+
+interface LoginFormValues {
+  email: string;
+  password: string;
+}
 
 interface SignupFormValues {
   username: string;
@@ -14,161 +24,266 @@ interface SignupFormValues {
   confirmPassword: string;
 }
 
-const initialValues: SignupFormValues = {
-  username: '',
-  email: '',
-  password: '',
-  confirmPassword: '',
-};
-
-const validationSchema = Yup.object({
-  username: Yup.string().required('Username is Required'),
-  email: Yup.string().email('Invalid email').required('Email is Required'),
-  password: Yup.string().min(6, 'Min 6 characters').required('Password is Required'),
+const signupValidationSchema = Yup.object({
+  username: Yup.string().required('Username is required'),
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().min(6, 'Minimum 6 characters').required('Password is required'),
   confirmPassword: Yup.string()
-    .oneOf([Yup.ref('password'), ''], 'Passwords must match')
-    .required('Confirm Password Required'),
+    .oneOf([Yup.ref('password')], 'Passwords must match')
+    .required('Confirm password is required'),
 });
 
-const Signup: React.FC = () => {
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirm, setShowConfirm] = useState(false);
+const loginValidationSchema = Yup.object({
+  email: Yup.string().email('Invalid email').required('Email is required'),
+  password: Yup.string().required('Password is required'),
+});
+
+const NewLogin: React.FC = () => {
+  const [selectedTab, setSelectedTab] = useState<'login' | 'signup'>('login');
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showSignupPassword, setShowSignupPassword] = useState<boolean>(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState<boolean>(false);
+  const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = async (values: SignupFormValues) => {
+  const handleApiError = (err: unknown, fallback: string) => {
+    const message =
+      typeof err === 'object' &&
+      err &&
+      'response' in err &&
+      err.response &&
+      typeof err.response === 'object' &&
+      'data' in err.response &&
+      err.response.data &&
+      typeof err.response.data === 'object' &&
+      'message' in err.response.data
+        ? (err.response.data as { message?: string }).message || fallback
+        : fallback;
+
+    toast.error(message);
+  };
+
+  const handleLoginSubmit = async (values: LoginFormValues) => {
+    try {
+      const user = await loginApi(values);
+      login(user);
+      toast.success('Login successful!');
+      navigate('/');
+    } catch (err) {
+      handleApiError(err, 'Login failed');
+    }
+  };
+
+  const handleSignupSubmit = async (values: SignupFormValues) => {
     try {
       await register({
         username: values.username,
         email: values.email,
         password: values.password,
       });
-      toast.success("Signup successful! Please login.");
-      //navigate("/verify-top");
+      toast.success('Signup successful! Please login.');
       navigate(`/verify-otp?email=${encodeURIComponent(values.email)}`);
-    } catch (err: unknown) {
-      if (
-        err &&
-        typeof err === 'object' &&
-        'response' in err &&
-        err.response &&
-        typeof err.response === 'object' &&
-        'data' in err.response &&
-        err.response.data && 
-        typeof err.response.data === 'object' && 
-        'message' in err.response.data
-      ) {
-         toast.error((err.response.data as { message?: string}).message || 'Login failed');
-      } else {
-         toast.error('Signup failed');
-      }
+    } catch (err) {
+      handleApiError(err, 'Signup failed');
     }
   };
 
+  const PasswordInput = ({
+    id,
+    name,
+    value,
+    onChange,
+    onBlur,
+    show,
+    toggle,
+    placeholder,
+  }: {
+    id: string;
+    name: string;
+    value: string;
+    onChange: React.ChangeEventHandler<HTMLInputElement>;
+    onBlur: React.FocusEventHandler<HTMLInputElement>;
+    show: boolean;
+    toggle: () => void;
+    placeholder: string;
+  }) => (
+    <div className="relative">
+      <input
+        id={id}
+        name={name}
+        type={show ? 'text' : 'password'}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        required
+        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#008080]"
+      />
+      <div
+        className="absolute top-1/2 right-3 -translate-y-1/2 cursor-pointer text-gray-500"
+        onClick={toggle}
+      >
+        {show ? <EyeSlashIcon className="w-5 h-5" /> : <EyeIcon className="w-5 h-5" />}
+      </div>
+    </div>
+  );
+
+  const LoginForm = () => (
+    <Formik<LoginFormValues>
+      initialValues={{ email: '', password: '' }}
+      validationSchema={loginValidationSchema}
+      onSubmit={handleLoginSubmit}
+    >
+      {({ values, handleChange, handleBlur, isSubmitting }) => (
+        <Form className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+            />
+            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <PasswordInput
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              show={showPassword}
+              toggle={() => setShowPassword(!showPassword)}
+              placeholder="Enter your password"
+            />
+            <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <Button type="submit" className="w-full bg-[#008080]" disabled={isSubmitting}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
+
+  const SignupForm = () => (
+    <Formik<SignupFormValues>
+      initialValues={{ username: '', email: '', password: '', confirmPassword: '' }}
+      validationSchema={signupValidationSchema}
+      onSubmit={handleSignupSubmit}
+    >
+      {({ values, handleChange, handleBlur, isSubmitting }) => (
+        <Form className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="username">Username</Label>
+            <Input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Enter your username"
+              value={values.username}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+            />
+            <ErrorMessage name="username" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="email">Email</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Enter your email"
+              value={values.email}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              required
+            />
+            <ErrorMessage name="email" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="password">Password</Label>
+            <PasswordInput
+              id="password"
+              name="password"
+              value={values.password}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              show={showSignupPassword}
+              toggle={() => setShowSignupPassword(!showSignupPassword)}
+              placeholder="Create a password"
+            />
+            <ErrorMessage name="password" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="confirmPassword">Confirm Password</Label>
+            <PasswordInput
+              id="confirmPassword"
+              name="confirmPassword"
+              value={values.confirmPassword}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              show={showConfirmPassword}
+              toggle={() => setShowConfirmPassword(!showConfirmPassword)}
+              placeholder="Confirm your password"
+            />
+            <ErrorMessage name="confirmPassword" component="div" className="text-red-500 text-sm" />
+          </div>
+
+          <Button type="submit" className="w-full bg-[#008080]" disabled={isSubmitting}>
+            {isSubmitting ? 'Signing up...' : 'Sign Up'}
+          </Button>
+        </Form>
+      )}
+    </Formik>
+  );
+
   return (
-    <div className="min-h-screen bg-[#FFFFFF] font-poppins">
-      {/* Header */}
-      <header className="bg-white shadow-[0_4px_16px_0_#00000026] py-4 flex justify-center mb-1">
-        <h1 className="text-[20px] font-[900] tracking-wide text-[#0487E2] md:h-[30px]">ChatterTrader</h1>
-      </header>
-
-      {/* Main Content */}
-      <div className="flex flex-col md:flex-row w-full bg-white rounded-lg overflow-hidden md:h-[640px] md:gap-0">
-        {/* Left Image */}
-        <div className="md:w-1/2 w-full h-48 md:h-full flex-shrink-0">
-          <img
-            src="/images/leftImage.svg"
-            alt="Signup Visual"
-            className="object-cover object-left w-full h-full"
-          />
+    <div className="flex flex-col md:flex-row min-h-screen w-full">
+      <div className="w-full md:w-1/2 bg-gray-100 flex flex-col justify-center px-6 py-12">
+        <div className="w-full max-w-sm mx-auto">
+          <div className="text-center mb-8">
+            <h1 className="text-5xl font-bold text-[#008080]">
+              Chatta<span className="text-orange-400">Trader</span>
+            </h1>
+          </div>
+          <Card>
+            <CardContent className="pt-6">
+              <h2 className="text-4xl font-bold text-center text-gray-900 mb-2">Welcome Back</h2>
+              <p className="text-sm text-center text-gray-600 mb-6">Please enter your details</p>
+              <Tabs defaultValue={selectedTab} onValueChange={(val) => setSelectedTab(val as 'login' | 'signup')}>
+                <TabsList className="grid w-full grid-cols-2 mb-6">
+                  <TabsTrigger value="login">Login</TabsTrigger>
+                  <TabsTrigger value="signup">Signup</TabsTrigger>
+                </TabsList>
+                <TabsContent value="login">
+                  <LoginForm />
+                </TabsContent>
+                <TabsContent value="signup">
+                  <SignupForm />
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
         </div>
-
-        {/* Form Section */}
-        <div className="md:w-1/2 w-full flex items-center justify-start px-6 py-8">
-          <Formik
-            initialValues={initialValues}
-            validationSchema={validationSchema}
-            onSubmit={handleSubmit}
-          >
-            <Form className="w-full max-w-md">
-              <h2 className="text-[#324054] text-[24px] md:text-[32px] font-semibold mb-6">Sign up Now</h2>
-
-              <FormInput name="username" label="Username" type="text" />
-              <FormInput name="email" label="Email" type="email" />
-
-              {/* Password */}
-              <div className="relative mb-4">
-                <FormInput
-                  name="password"
-                  label="Enter your Password"
-                  type={showPassword ? 'text' : 'password'}
-                />
-                <div
-                  className="absolute right-3 top-[52px] cursor-pointer"
-                  onClick={() => setShowPassword(!showPassword)}
-                >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-600" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-600" />
-                  )}
-                </div>
-              </div>
-
-              {/* Confirm Password */}
-              <div className="relative mb-4">
-                <FormInput
-                  name="confirmPassword"
-                  label="Confirm Password"
-                  type={showConfirm ? 'text' : 'password'}
-                />
-                <div
-                  className="absolute right-3 top-[52px] cursor-pointer"
-                  onClick={() => setShowConfirm(!showConfirm)}
-                >
-                  {showConfirm ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-600" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-600" />
-                  )}
-                </div>
-              </div>
-
-              {/* Terms & Marketing */}
-              <div>
-                <div className="flex items-start gap-2 mb-2">
-                  <img src="/images/check.svg" alt="Check Icon" className="w-4 h-4 mt-1" />
-                  <p className="text-[14px] font-[700] font-poppins text-[#32405499]">
-                    By Creating an account, I agree to our{' '}
-                    <a href="#" className="text-[#0463CA]">Terms of use</a> and policy
-                  </p>
-                </div>
-                <div className="flex items-start gap-2">
-                  <img src="/images/check.svg" alt="Check Icon" className="w-4 h-4 mt-1" />
-                  <p className="text-[14px] font-[700] font-poppins text-[#32405499] leading-tight">
-                    By creating an account, I am also consenting to receive SMS messages and Emails including web3 News update and Marketing Promotions.
-                  </p>
-                </div>
-              </div>
-
-              {/* Button */}
-              <div className="flex flex-col md:flex-row items-center gap-2 md:gap-6 mt-4">
-                <button
-                  type="submit"
-                  className="bg-[#BBCACA] rounded-[24px] w-full md:w-[158px] md:h-[59px] py-3 text-[#324054] font-[500] text-[18px] cursor-pointer font-poppins"
-                >
-                  Sign Up
-                </button>
-                <p className="text-[#32405499] text-[14px] md:text-[16px] font-[500] text-center md:text-left">
-                  Already have an account?{' '}
-                  <Link to="/login" className="text-[#0463CA]">Login</Link>
-                </p>
-              </div>
-            </Form>
-          </Formik>
-        </div>
+      </div>
+      <div className="hidden md:block md:w-1/2">
+        <img className="h-full w-full object-cover" src="/images/chatbot.png" alt="ChattaTrader background" />
       </div>
     </div>
   );
 };
 
-export default Signup;
+export default NewLogin;
