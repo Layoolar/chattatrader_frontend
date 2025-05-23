@@ -122,7 +122,7 @@ const VerifyOtp: React.FC = () => {
                     </div>
                     <Button
                       type='submit'
-                      className='w-full bg-[#008080]'
+                      className='w-full bg-[#008080] text-[#FAFAFA] cursor-pointer'
                       disabled={isSubmitting}
                     >
                       {isSubmitting ? 'Verifying...' : 'Verify Email'}
