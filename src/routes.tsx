@@ -5,6 +5,8 @@ import { lazy } from 'react';
 
 const Home = lazy(() => import('./pages/Home'));
 const About = lazy(() => import('./pages/About'));
+const Discovery = lazy(() => import('./pages/discovery'));
+const WalletPage = lazy(() => import('./pages/wallets'))
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 export const router = createBrowserRouter([
@@ -26,6 +28,14 @@ export const router = createBrowserRouter([
         path: '/about',
         element: <About />,
       },
+      {
+        path: '/discovery',
+        element: <Discovery />
+      },
+      {
+       path: '/wallet',
+       element: <WalletPage />
+      }
     ],
   },
 ]);
