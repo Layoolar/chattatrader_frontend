@@ -71,7 +71,7 @@ const ComingSoon = () => {
         </form>
 
         <p className='text-xs text-gray-400 mt-4'>
-          By signing up, you agree to our{' '}
+          By signing up, you agree to our
           <a href='#' className='underline'>
             Privacy Policy
           </a>
@@ -83,7 +83,7 @@ const ComingSoon = () => {
         <img
           src={chatboturl}
           alt='Chatbot Illustration'
-          className='h-lvh ml-auto w-4/5'
+          className='h-lvh ml-auto'
         />
       </div>
     </div>
