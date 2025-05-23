@@ -7,12 +7,16 @@ import { lazy } from 'react';
 
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
+const Chat = lazy(() => import('./pages/Chat/Chat'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const ComingSoon = lazy(() => import('./pages/ComingSoon/ComingSoon'));
+const Signup = lazy(() => import('./pages/Signup/Signup'));
+const VerifyOtp = lazy(() => import('./pages/VerifyOtp/VerifyOtp'));
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <SidebarLayout />,
     errorElement: <NotFound />,
     children: [
       {
@@ -30,12 +34,12 @@ export const router = createBrowserRouter([
       },
       {
         path: '/signup',
-        element: <Signup />
+        element: <Signup />,
       },
       {
         path: '/verify-otp',
-        element: <VerifyOtp />
-      }
+        element: <VerifyOtp />,
+      },
     ],
   },
 ]);
