@@ -1,9 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
-import App from './App';
-import ComingSoon from './pages/ComingSoon/ComingSoon';
-import Signup from './pages/Signup/Signup';
-import VerifyOtp from './pages/VerifyOtp/VerifyOtp';
 import { lazy } from 'react';
+import SidebarLayout from './layout/SideLayout';
+import PlainLayout from './layout/PlainLayout';
 
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
@@ -19,27 +17,18 @@ export const router = createBrowserRouter([
     element: <SidebarLayout />,
     errorElement: <NotFound />,
     children: [
-      {
-        path: '/',
-        element: <Home />,
-      },
-      {
-        path: '/soon',
-        element: <ComingSoon />,
-      },
-
-      {
-        path: '/about',
-        element: <About />,
-      },
-      {
-        path: '/signup',
-        element: <Signup />,
-      },
-      {
-        path: '/verify-otp',
-        element: <VerifyOtp />,
-      },
+      { path: '/', element: <Home /> },
+      { path: '/about', element: <About /> },
+      { path: '/chat', element: <Chat /> },
+      { path: '/soon', element: <ComingSoon /> },
+    ],
+  },
+  {
+    path: '/',
+    element: <PlainLayout />,
+    children: [
+      { path: '/sign-up', element: <Signup /> },
+      { path: '/verify-otp', element: <VerifyOtp /> },
     ],
   },
 ]);
