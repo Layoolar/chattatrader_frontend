@@ -31,7 +31,12 @@ export default function ChatPage() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    setTimeout(() => {
+      messagesEndRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'nearest',
+      });
+    }, 50);
   };
 
   const sendMessage = async (content: string | Blob, type: MessageType) => {
@@ -307,7 +312,7 @@ export default function ChatPage() {
           </div>
 
           {/* Messages */}
-          <div className='flex-1 overflow-y-auto pr-1 sm:pr-2 flex flex-col custom-scrollbar'>
+          <div className='flex-1 overflow-y-auto pr-1 sm:pr-2 flex flex-col custom-scrollbar pt-8'>
             {messages.map((msg, index) => renderMessage(msg, index))}
             {audioBlob && (
               <div className='flex items-start gap-3 mb-4 flex-row-reverse'>
