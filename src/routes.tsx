@@ -2,6 +2,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import { lazy } from 'react';
 import SidebarLayout from './layout/SideLayout';
 import PlainLayout from './layout/PlainLayout';
+import { ErrorWithSidebar } from './layout/ErrorWithSidebar';
 
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
@@ -15,7 +16,11 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <SidebarLayout />,
-    errorElement: <NotFound />,
+    errorElement: (
+      <ErrorWithSidebar>
+        <NotFound />
+      </ErrorWithSidebar>
+    ),
     children: [
       { path: '/', element: <Home /> },
       { path: '/about', element: <About /> },
