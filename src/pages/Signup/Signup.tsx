@@ -210,36 +210,36 @@ export default function NewLogin() {
   );
 
   return (
-  <div className="flex flex-col md:flex-row w-full h-screen overflow-hidden">
-    <div className="w-full md:w-1/2 bg-gray-100 flex flex-col px-6 py-8 h-full md:h-auto overflow-y-auto">
-      <div className="max-w-md mx-auto">
-        <h1 className="text-5xl font-bold text-[#008080] mb-4">
-          Chatta<span className="text-orange-400">Trader</span>
-        </h1>
-        <h2 className="text-3xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-        <p className="text-sm text-gray-600 mb-6">Please enter your details</p>
-        <Tabs value={selectedTab} onValueChange={setSelectedTab}>
-          <TabsList className="grid grid-cols-2 mb-4 bg-[#E9E9E9]">
-            <TabsTrigger value="login" className="">Login</TabsTrigger>
-            <TabsTrigger value="signup" className="">Signup</TabsTrigger>
-          </TabsList>
-        </Tabs>
-      </div>
-
-      <div className="flex-grow overflow-y-auto px-6 pb-10">
-        <div className="max-w-[324px] mx-auto">
-          {selectedTab === 'login' ? <LoginForm /> : <SignupForm />}
-        </div>
-      </div>
+  <div className="flex flex-col md:flex-row w-full min-h-screen">
+  <div className="w-full md:w-1/2 bg-gray-100 flex flex-col px-6 py-8">
+    <div className="max-w-md mx-auto">
+      <h1 className="text-[25px] text-center mt-[40px] font-bold text-[#008080] mb-4">
+        Chatta<span className="text-orange-400">Trader</span>
+      </h1>
+      <h2 className="text-[25px] font-bold text-center mt-[40px] text-gray-900 mb-2">Welcome Back</h2>
+      <p className="text-sm text-gray-600 mb-6 text-center">Welcome Back, Please enter your details</p>
+      <Tabs value={selectedTab} onValueChange={setSelectedTab}>
+        <TabsList className="grid grid-cols-2 mb-4 bg-[#E9E9E9]">
+          <TabsTrigger value="login">Login</TabsTrigger>
+          <TabsTrigger value="signup">Signup</TabsTrigger>
+        </TabsList>
+      </Tabs>
     </div>
 
-    <div className="hidden md:flex md:w-1/2 h-full">
-      <img
-        src="/images/chatbot.png"
-        alt="Chatbot"
-        className="w-full h-full object-cover"
-      />
+    <div className="px-6 pb-10">
+      <div className="max-w-[324px] mx-auto">
+        {selectedTab === 'login' ? <LoginForm /> : <SignupForm />}
+      </div>
     </div>
   </div>
+
+  <div className="hidden md:flex md:w-1/2 h-full">
+    <img
+      src="/images/chatbot.png"
+      alt="Chatbot"
+      className="w-full h-full object-cover"
+    />
+  </div>
+</div>
 );
 }
