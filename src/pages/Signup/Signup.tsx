@@ -213,11 +213,11 @@ export default function NewLogin() {
   <div className="flex flex-col md:flex-row w-full min-h-screen">
   <div className="w-full md:w-1/2 bg-gray-100 flex flex-col px-6 py-8">
     <div className="max-w-md mx-auto">
-      <h1 className="text-[25px] text-center mt-[40px] font-bold text-[#008080] mb-4">
+      <h1 className="text-[25px] text-center mt-[40px] font-bold text-[#008080] mb-4 font-poppins">
         Chatta<span className="text-orange-400">Trader</span>
       </h1>
-      <h2 className="text-[25px] font-bold text-center mt-[40px] text-gray-900 mb-2">Welcome Back</h2>
-      <p className="text-sm text-gray-600 mb-6 text-center">Welcome Back, Please enter your details</p>
+      <h2 className="text-[25px] font-bold text-center mt-[40px] text-gray-900 mb-2 font-poppins">Welcome Back</h2>
+      <p className="text-sm text-gray-600 mb-6 text-center font-poppins">Welcome Back, Please enter your details</p>
       <Tabs value={selectedTab} onValueChange={setSelectedTab}>
         <TabsList className="grid grid-cols-2 mb-4 bg-[#E9E9E9]">
           <TabsTrigger value="login">Login</TabsTrigger>
