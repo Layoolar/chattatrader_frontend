@@ -287,151 +287,155 @@ export default function ChatPage() {
   };
 
   return (
-    <div className='flex h-screen w-screen overflow-hidden'>
-      {/* Chat Area - Left */}
-      <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
-        {/* Mobile toggle button for chats panel */}
-        <button
-          className='md:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10'
-          onClick={() => setIsChatsOpen(!isChatsOpen)}
-        >
-          <FaComments size={20} />
-        </button>
+    <>
+      <button
+        className='md:hidden top-2 right-2 mb-4 fixed p-2 bg-[#007b83] text-white rounded hover:bg-cyan-700 z-10'
+        onClick={() => setIsChatsOpen(!isChatsOpen)}
+      >
+        <FaComments size={20} />
+      </button>
+      <div className='flex h-screen w-screen overflow-hidden'>
+        {/* Chat Area - Left */}
+        <div className='flex-1 flex flex-col bg-white/20 backdrop-blur-md p-2 sm:p-2 md:p-2'>
+          {/* Mobile toggle button for chats panel */}
 
-        {/* Chat Session Title */}
-        <div className='mb-4 border-b border-gray-300 pb-2 pt-6 md:pt-0'>
-          <h2 className='text-1xl font-bold text-gray-900 text-center'>
-            {currentChat.title}
-          </h2>
-        </div>
+          {/* Chat Session Title */}
+          <div className='mb-4 border-b border-gray-300 pb-2 pt-6 md:pt-0'>
+            <h2 className='text-1xl font-bold text-gray-900 text-center'>
+              {currentChat.title}
+            </h2>
+          </div>
 
-        {/* Messages */}
-        <div className='flex-1 overflow-y-auto pr-1 sm:pr-2 flex flex-col custom-scrollbar'>
-          {messages.map((msg, index) => renderMessage(msg, index))}
-          {audioBlob && (
-            <div className='flex items-start gap-3 mb-4 flex-row-reverse'>
-              <Avatar isUser={true} />
-              <div className='flex items-center gap-2 w-fit bg-[#007b83] rounded-lg p-1'>
-                <audio
-                  controls
-                  src={URL.createObjectURL(audioBlob)}
-                  className='max-w-[180px]'
-                />
-                <button
-                  onClick={handleSendAudio}
-                  className='p-2 text-white bg-cyan-600 rounded-full hover:bg-cyan-700'
-                >
-                  <FaPaperPlane />
-                </button>
+          {/* Messages */}
+          <div className='flex-1 overflow-y-auto pr-1 sm:pr-2 flex flex-col custom-scrollbar'>
+            {messages.map((msg, index) => renderMessage(msg, index))}
+            {audioBlob && (
+              <div className='flex items-start gap-3 mb-4 flex-row-reverse'>
+                <Avatar isUser={true} />
+                <div className='flex items-center gap-2 w-fit bg-[#007b83] rounded-lg p-1'>
+                  <audio
+                    controls
+                    src={URL.createObjectURL(audioBlob)}
+                    className='max-w-[180px]'
+                  />
+                  <button
+                    onClick={handleSendAudio}
+                    className='p-2 text-white bg-cyan-600 rounded-full hover:bg-cyan-700'
+                  >
+                    <FaPaperPlane />
+                  </button>
+                </div>
               </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+
+          {/* Hidden file input */}
+          <input
+            type='file'
+            accept='image/*'
+            className='hidden'
+            ref={fileInputRef}
+            onChange={handleImageUpload}
+          />
+
+          {/* Input */}
+          <div className='mt-4 flex gap-2 w-full'>
+            <div className='flex-1 min-w-0'>
+              <input
+                type='text'
+                className='w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-0 focus:border-gray-300 text-sm'
+                placeholder='Type your message...'
+                value={input}
+                onChange={(e: any) => setInput(e.value)}
+                onKeyDown={(e) =>
+                  e.key === 'Enter' && sendMessage(input, 'text')
+                }
+                disabled={isRecording}
+              />
             </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
 
-        {/* Hidden file input */}
-        <input
-          type='file'
-          accept='image/*'
-          className='hidden'
-          ref={fileInputRef}
-          onChange={handleImageUpload}
-        />
+            <div className='flex items-center gap-2'>
+              <button
+                className={`p-3 rounded-full ${
+                  isRecording
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-200 text-gray-700'
+                } hover:${
+                  isRecording ? 'bg-red-700' : 'bg-gray-300'
+                } transition-colors duration-200 flex-shrink-0`}
+                onClick={isRecording ? stopRecording : startRecording}
+              >
+                {isRecording ? <FaStop /> : <FaMicrophone />}
+              </button>
 
-        {/* Input */}
-        <div className='mt-4 flex gap-2 w-full'>
-          <div className='flex-1 min-w-0'>
-            <input
-              type='text'
-              className='w-full p-2 border border-gray-300 rounded-full focus:outline-none focus:ring-0 focus:border-gray-300 text-sm'
-              placeholder='Type your message...'
-              value={input}
-              onChange={(e: any) => setInput(e.value)}
-              onKeyDown={(e) => e.key === 'Enter' && sendMessage(input, 'text')}
-              disabled={isRecording}
-            />
-          </div>
+              <button
+                className='bg-gray-200 text-gray-700 p-3 rounded-full hover:bg-gray-300 transition-colors duration-200 flex-shrink-0'
+                onClick={triggerImageUpload}
+              >
+                <FaImage />
+              </button>
 
-          <div className='flex items-center gap-2'>
-            <button
-              className={`p-3 rounded-full ${
-                isRecording
-                  ? 'bg-red-600 text-white'
-                  : 'bg-gray-200 text-gray-700'
-              } hover:${
-                isRecording ? 'bg-red-700' : 'bg-gray-300'
-              } transition-colors duration-200 flex-shrink-0`}
-              onClick={isRecording ? stopRecording : startRecording}
-            >
-              {isRecording ? <FaStop /> : <FaMicrophone />}
-            </button>
-
-            <button
-              className='bg-gray-200 text-gray-700 p-3 rounded-full hover:bg-gray-300 transition-colors duration-200 flex-shrink-0'
-              onClick={triggerImageUpload}
-            >
-              <FaImage />
-            </button>
-
-            <button
-              className={`p-3 rounded-full ${
-                input.trim() && !isRecording
-                  ? 'bg-cyan-600 text-white hover:bg-cyan-700'
-                  : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-              } transition-colors duration-200 flex-shrink-0`}
-              onClick={() => sendMessage(input, 'text')}
-              disabled={!input.trim() || isRecording}
-            >
-              <FaPaperPlane />
-            </button>
+              <button
+                className={`p-3 rounded-full ${
+                  input.trim() && !isRecording
+                    ? 'bg-cyan-600 text-white hover:bg-cyan-700'
+                    : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                } transition-colors duration-200 flex-shrink-0`}
+                onClick={() => sendMessage(input, 'text')}
+                disabled={!input.trim() || isRecording}
+              >
+                <FaPaperPlane />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Chats Panel - Right */}
-      <div
-        className={`
+        {/* Chats Panel - Right */}
+        <div
+          className={`
           fixed top-0 right-0 z-50 h-full w-64 sm:w-72 bg-white/30 backdrop-blur-md p-4 border-l border-gray-200 flex flex-col
           transform transition-transform duration-300 ease-in-out
           md:relative md:translate-x-0
           ${isChatsOpen ? 'translate-x-0' : 'translate-x-full md:translate-x-0'}
         `}
-      >
-        <button
-          className='md:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700'
-          onClick={() => setIsChatsOpen(false)}
         >
-          <FaTimes />
-        </button>
+          <button
+            className='md:hidden self-end mb-4 p-2 bg-cyan-600 text-white rounded hover:bg-cyan-700'
+            onClick={() => setIsChatsOpen(false)}
+          >
+            <FaTimes />
+          </button>
 
-        <h2 className='text-xl font-semibold mb-4'>Chats</h2>
-        <input
-          type='text'
-          placeholder='Search chats...'
-          className='w-full p-2 mb-4 text-sm rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500'
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <ul className='space-y-2 overflow-y-auto flex-1 custom-scrollbar'>
-          {chats
-            .filter((chat) =>
-              chat.title.toLowerCase().includes(search.toLowerCase())
-            )
-            .map((chat, index) => (
-              <li
-                key={index}
-                onClick={() => handleSelectChat(chat)}
-                className={`p-2 rounded cursor-pointer text-sm ${
-                  chat === currentChat
-                    ? 'bg-cyan-200 font-semibold'
-                    : 'text-gray-800 hover:bg-cyan-100'
-                }`}
-              >
-                {chat.title}
-              </li>
-            ))}
-        </ul>
+          <h2 className='text-xl font-semibold mb-4'>Chats</h2>
+          <input
+            type='text'
+            placeholder='Search chats...'
+            className='w-full p-2 mb-4 text-sm rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-cyan-500'
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <ul className='space-y-2 overflow-y-auto flex-1 custom-scrollbar'>
+            {chats
+              .filter((chat) =>
+                chat.title.toLowerCase().includes(search.toLowerCase())
+              )
+              .map((chat, index) => (
+                <li
+                  key={index}
+                  onClick={() => handleSelectChat(chat)}
+                  className={`p-2 rounded cursor-pointer text-sm ${
+                    chat === currentChat
+                      ? 'bg-cyan-200 font-semibold'
+                      : 'text-gray-800 hover:bg-cyan-100'
+                  }`}
+                >
+                  {chat.title}
+                </li>
+              ))}
+          </ul>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
