@@ -3,11 +3,13 @@ import { lazy } from 'react';
 import SidebarLayout from './layout/SideLayout';
 import PlainLayout from './layout/PlainLayout';
 
-import ComingSoon from './pages/ComingSoon/ComingSoon';
 const Home = lazy(() => import('./pages/Home/Home'));
 const About = lazy(() => import('./pages/About/About'));
 const Chat = lazy(() => import('./pages/Chat/Chat'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const ComingSoon = lazy(() => import('./pages/ComingSoon/ComingSoon'));
+const Signup = lazy(() => import('./pages/Signup/Signup'));
+const VerifyOtp = lazy(() => import('./pages/VerifyOtp/VerifyOtp'));
 
 export const router = createBrowserRouter([
   {
@@ -24,6 +26,9 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <PlainLayout />,
-    children: [],
+    children: [
+      { path: '/sign-up', element: <Signup /> },
+      { path: '/verify-otp', element: <VerifyOtp /> },
+    ],
   },
 ]);

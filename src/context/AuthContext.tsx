@@ -19,6 +19,7 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   const login = (userData: Partial<User>) => setUser(userData);
   const logout = () => setUser(null);
 
+
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
       {children}
