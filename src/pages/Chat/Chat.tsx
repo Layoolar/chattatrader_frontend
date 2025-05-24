@@ -300,8 +300,8 @@ export default function ChatPage() {
           {/* Mobile toggle button for chats panel */}
 
           {/* Chat Session Title */}
-          <div className='mb-4 border-b border-gray-300 pb-2 pt-6 md:pt-0'>
-            <h2 className='text-1xl font-bold text-gray-900 text-center'>
+          <div className='sticky top-5 z-10 bg-white border-b border-gray-300 py-2 md:py-4 pb-3'>
+            <h2 className='text-lg md:text-xl font-bold text-gray-900 text-center'>
               {currentChat.title}
             </h2>
           </div>
