@@ -67,7 +67,7 @@ const VerifyOtp: React.FC = () => {
               <Formik
                 initialValues={{ otp: '' }}
                 validationSchema={otpValidationSchema}
-                onSubmit={async (values, { setSubmitting }) => {
+                onSubmit={async (_values, { setSubmitting }) => {
                   setError('');
                   try {
                     navigate('/'); // On success
