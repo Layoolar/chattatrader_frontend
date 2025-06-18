@@ -12,7 +12,7 @@ import Signup from './pages/Signup/Signup';
 import History from './pages/History/History';
 import Settings from './pages/Settings/Settings';
 import ComingSoon from './pages/ComingSoon/ComingSoon';
-import Discover from './pages/discovery/discover';
+import Discover from './pages/Discover/discover';
 import Wallet from './pages/wallet/wallet';
 import Trading from './pages/Trading/trading';
 
@@ -31,6 +31,15 @@ export const router = createBrowserRouter([
     ],
   },
 
+  {
+    path: '/trading',
+    element: <Trading />,
+  },
+  {
+    path: '/discover',
+    element: <Discover />,
+  },
+  // Routes with SidebarLayout (main app routes)
   {
     path: '/app',
     element: (
@@ -92,14 +101,14 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      {
-        path: 'discover',
-        element: (
-          <ProtectedRoute>
-            <Discover />
-          </ProtectedRoute>
-        ),
-      },
+      // {
+      //   path: 'discover',
+      //   element: (
+      //     <ProtectedRoute>
+      //       <Discover />
+      //     </ProtectedRoute>
+      //   ),
+      // },
       {
         path: 'wallet',
         element: (

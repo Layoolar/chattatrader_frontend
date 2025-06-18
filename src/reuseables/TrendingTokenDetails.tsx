@@ -1,5 +1,5 @@
 import React from 'react';
-import type { TrendingToken, TokenData } from '../pages/discovery/types';
+import type { TrendingToken, TokenData } from '../pages/Discover/types';
 import { Modal } from './modal';
 import { Card } from './Card';
 import { motion } from 'framer-motion';

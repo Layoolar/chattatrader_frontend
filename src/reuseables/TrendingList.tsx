@@ -4,7 +4,7 @@ import { Card, CardContent } from './Card';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaArrowRight } from 'react-icons/fa';
 import '../styles/animations.css';
-import type { TrendingToken } from '../pages/discovery/types';
+import type { TrendingToken } from '../pages/Discover/types';
 
 interface Props {
   chain: 'solana' | 'ethereum' | 'base';
