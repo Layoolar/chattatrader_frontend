@@ -202,7 +202,7 @@ const Discover: React.FC = () => {
                 className={`px-4 py-2 text-sm font-medium transition-all duration-200 ease-out rounded-md relative
                 ${
                   selectedChain === chain
-                    ? 'bg-[#007b83] !text-white shadow-sm ring-2 ring-[#007b83]/20 scale-[1.02]'
+                    ? 'bg-[#007b83] !bg-[#007b83] !text-white shadow-sm ring-2 ring-[#007b83]/20 scale-[1.02]'
                     : 'bg-white text-gray-600 hover:text-[#007b83] hover:bg-[#007b83]/5 hover:scale-[1.02]'
                 }`}
               >

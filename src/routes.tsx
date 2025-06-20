@@ -35,10 +35,10 @@ export const router = createBrowserRouter([
     path: '/trading',
     element: <Trading />,
   },
-  {
-    path: '/discover',
-    element: <Discover />,
-  },
+  // {
+  //   path: '/discover',
+  //   element: <Discover />,
+  // },
   // Routes with SidebarLayout (main app routes)
   {
     path: '/app',
@@ -101,14 +101,14 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
-      // {
-      //   path: 'discover',
-      //   element: (
-      //     <ProtectedRoute>
-      //       <Discover />
-      //     </ProtectedRoute>
-      //   ),
-      // },
+      {
+        path: 'discover',
+        element: (
+          <ProtectedRoute>
+            <Discover />
+          </ProtectedRoute>
+        ),
+      },
       {
         path: 'wallet',
         element: (
