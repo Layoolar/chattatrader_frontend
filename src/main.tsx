@@ -5,11 +5,18 @@ import { router } from './routes';
 import './index.css';
 
 import { Suspense } from 'react';
+import { AuthProvider } from './context/AuthContext';
+import AuthGuard from './components/AuthGuard';
+import Loader from './reuseables/Loader';
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Suspense fallback={<div>Loading...</div>}>
-      <RouterProvider router={router} />
-    </Suspense>
+    <AuthProvider>
+      <AuthGuard>
+        <Suspense fallback={<Loader />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </AuthGuard>
+    </AuthProvider>
   </React.StrictMode>
 );

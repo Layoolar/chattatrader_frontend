@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import chatboturl from '../../public/images/chatbot.png';
+import chatboturl from '../../../public/images/chatbot.png';
 import { Toaster, toast } from 'react-hot-toast';
-import LoadingSpinner from '../reuseables/LoadingSpinner';
+import LoadingSpinner from '../../reuseables/BtnLoader';
 
 const ComingSoon = () => {
   const [email, setEmail] = useState('');
@@ -25,9 +25,8 @@ const ComingSoon = () => {
       );
     }, 2000);
   };
-
   return (
-    <div className='min-h-screen flex flex-col lg:flex-row'>
+    <div className='flex flex-col lg:flex-row min-h-screen'>
       <Toaster position='top-center' />
 
       {/* Left Section */}
@@ -71,7 +70,7 @@ const ComingSoon = () => {
         </form>
 
         <p className='text-xs text-gray-400 mt-4'>
-          By signing up, you agree to our{' '}
+          By signing up, you agree to our
           <a href='#' className='underline'>
             Privacy Policy
           </a>
@@ -83,7 +82,7 @@ const ComingSoon = () => {
         <img
           src={chatboturl}
           alt='Chatbot Illustration'
-          className='h-lvh ml-auto w-4/5'
+          className='h-lvh ml-auto'
         />
       </div>
     </div>

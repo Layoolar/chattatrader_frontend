@@ -1,11 +1,22 @@
 // tailwind.config.cjs
 module.exports = {
+
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+     container: {
+      center: true,
+      padding: '2rem',
+      screens: {
+        '2xl': '1400px',
+      },
+    },
     extend: {
-      // This preserves Tailwind's default colors (blue-500, red-500, etc.)
       colors: {
-        primary: '#3b82f6', // Optional: Add your custom color
+        primary: '#007b83',
+        background: 'hsl(var(--background))',
+      },
+      fontFamily: {
+        poppins: ['Poppins', 'sans-serif'],
       },
     },
   },
