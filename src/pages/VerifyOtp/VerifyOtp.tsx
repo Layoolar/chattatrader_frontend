@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
-import { useNavigate, Navigate } from 'react-router-dom';
+import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { verifyCode, requestCode, getUserWithToken } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
 import { Formik, Form, ErrorMessage } from 'formik';
@@ -25,18 +25,18 @@ const otpValidationSchema = Yup.object({
 const VerifyOtp: React.FC = () => {
   const navigate = useNavigate();
   const { login, user } = useAuth();
-  const email = user?.email;
+  const [searchParams] = useSearchParams();
+  const email = user?.email ?? searchParams.get('email') ?? undefined;
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
   const otpSentRef = useRef(false);
   const handleVerifySubmit = async (
     values: { otp: string },
-    { setSubmitting }: any
+    { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
   ) => {
     setError('');
     try {
-      user;
-      if (!user?.email) return;
+      if (!email) return;
 
       await verifyCode({ code: values.otp, email: email as string });
 
@@ -74,7 +74,7 @@ const VerifyOtp: React.FC = () => {
     try {
       await requestCode({ email });
       toast.success('OTP resent successfully!');
-    } catch (err: unknown) {
+    } catch {
       setError('Failed to resend OTP. Please try again.');
     } finally {
       setIsResending(false);
