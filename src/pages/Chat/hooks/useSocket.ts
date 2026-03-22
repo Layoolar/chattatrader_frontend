@@ -6,7 +6,7 @@ export const useSocket = (onMessage: (message: Message) => void) => {
   const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
-    socketRef.current = io('https://api.chattatrader.com', {
+    socketRef.current = io(import.meta.env.VITE_API_BASE_URL, {
       transports: ['websocket'],
       reconnection: true,
       reconnectionAttempts: 5,
