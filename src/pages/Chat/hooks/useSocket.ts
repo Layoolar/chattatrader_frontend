@@ -14,11 +14,11 @@ export const useSocket = (onMessage: (message: Message) => void) => {
     });
 
     socketRef.current.on('connect', () => {
-      ('Connected to Socket.IO server');
+      console.log('Connected to Socket.IO server');
     });
 
     socketRef.current.on('disconnect', () => {
-      ('Disconnected from Socket.IO server');
+      console.log('Disconnected from Socket.IO server');
     });
 
     socketRef.current.on('response', (data: any) => {
