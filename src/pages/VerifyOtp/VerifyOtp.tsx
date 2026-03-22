@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
 import { verifyCode, requestCode } from '../../api/auth';
@@ -29,7 +29,6 @@ const VerifyOtp: React.FC = () => {
   const email = user?.email ?? searchParams.get('email') ?? undefined;
   const [error, setError] = useState<string>('');
   const [isResending, setIsResending] = useState<boolean>(false);
-  const otpSentRef = useRef(false);
   const handleVerifySubmit = async (
     values: { otp: string },
     { setSubmitting }: { setSubmitting: (isSubmitting: boolean) => void }
@@ -48,22 +47,6 @@ const VerifyOtp: React.FC = () => {
     }
     setSubmitting(false);
   };
-
-  useEffect(() => {
-    const sessionKey = `otp_sent_${email}`;
-    if (email && !otpSentRef.current && !sessionStorage.getItem(sessionKey)) {
-      otpSentRef.current = true;
-      sessionStorage.setItem(sessionKey, 'true');
-      requestCode({ email })
-        .then(() => {
-          toast.success('OTP sent to your email!');
-        })
-        .catch(() => {
-          sessionStorage.removeItem(sessionKey);
-          setError('Failed to send OTP. Please try again.');
-        });
-    }
-  }, [email]);
 
   if (!email) {
     return <Navigate to='/sign-up' replace />;
