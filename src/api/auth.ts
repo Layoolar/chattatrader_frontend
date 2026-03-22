@@ -38,11 +38,13 @@ export const login = async (
 ): Promise<{
   userWithoutPassword: Partial<User>;
 }> => {
-  return instance
-    .post<{
-      userWithoutPassword: Partial<User>;
-    }>('/users/login', data)
-    .then((res) => res.data);
+  const res = await instance.post<{
+    msg: string;
+    userInfo: Partial<User>;
+    token: string;
+  }>('/users/login', data);
+  localStorage.setItem('token', res.data.token);
+  return getUserWithToken();
 };
 
 export const register = async (
@@ -61,21 +63,30 @@ export const requestCode = async (data: RequestCodeRequest): Promise<void> => {
   await instance.post('/verification/requestcode', data);
 };
 
-export const verifyCode = async (data: VerifyCodeRequest): Promise<void> => {
-  await instance.post('/verification/verifycode', data);
+export const verifyCode = async (
+  data: VerifyCodeRequest
+): Promise<{ userWithoutPassword: Partial<User> }> => {
+  const res = await instance.post<{
+    msg: string;
+    userInfo: Partial<User>;
+    token: string;
+  }>('/verification/verifycode', data);
+  localStorage.setItem('token', res.data.token);
+  return getUserWithToken();
 };
 
 export const getUserWithToken = async (): Promise<{
   userWithoutPassword: Partial<User>;
 }> => {
-  return instance
-    .get<{
-      userWithoutPassword: Partial<User>;
-    }>('users/getuserwithtoken')
-    .then((res) => res.data);
+  const res = await instance.get<{
+    msg: string;
+    userInfo: Partial<User>;
+  }>('users/getuserwithtoken');
+  return { userWithoutPassword: res.data.userInfo };
 };
 
 export const logout = async (): Promise<void> => {
+  localStorage.removeItem('token');
   await instance.post('/users/logout');
 };
 

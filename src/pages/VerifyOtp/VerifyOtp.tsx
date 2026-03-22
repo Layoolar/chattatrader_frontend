@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import * as Yup from 'yup';
 import { useNavigate, Navigate, useSearchParams } from 'react-router-dom';
-import { verifyCode, requestCode, getUserWithToken } from '../../api/auth';
+import { verifyCode, requestCode } from '../../api/auth';
 import { useAuth } from '../../context/AuthContext';
 import { Formik, Form, ErrorMessage } from 'formik';
 import { Card, CardContent } from '../../reuseables/Card';
@@ -38,9 +38,7 @@ const VerifyOtp: React.FC = () => {
     try {
       if (!email) return;
 
-      await verifyCode({ code: values.otp, email: email as string });
-
-      const userData = await getUserWithToken();
+      const userData = await verifyCode({ code: values.otp, email: email as string });
       login(userData);
 
       navigate('/app/discover');
@@ -52,13 +50,16 @@ const VerifyOtp: React.FC = () => {
   };
 
   useEffect(() => {
-    if (email && !otpSentRef.current) {
+    const sessionKey = `otp_sent_${email}`;
+    if (email && !otpSentRef.current && !sessionStorage.getItem(sessionKey)) {
       otpSentRef.current = true;
+      sessionStorage.setItem(sessionKey, 'true');
       requestCode({ email })
         .then(() => {
           toast.success('OTP sent to your email!');
         })
         .catch(() => {
+          sessionStorage.removeItem(sessionKey);
           setError('Failed to send OTP. Please try again.');
         });
     }
